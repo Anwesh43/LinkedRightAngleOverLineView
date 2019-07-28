@@ -199,4 +199,26 @@ class RightAngleOverLineView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : RightAngleOverLineView) {
+
+        private val raol : RightAngleOverLine = RightAngleOverLine(0)
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            raol.draw(canvas, paint)
+            animator.animate {
+                raol.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            raol.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
