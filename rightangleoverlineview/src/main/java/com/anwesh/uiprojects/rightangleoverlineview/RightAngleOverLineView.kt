@@ -221,4 +221,13 @@ class RightAngleOverLineView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : RightAngleOverLineView {
+            val view : RightAngleOverLineView = RightAngleOverLineView(activity)
+            activity.setContentView(view)
+            return view
+        }
+    }
 }
