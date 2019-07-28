@@ -60,7 +60,7 @@ fun Canvas.drawRAOLNode(i : Int, scale : Float, paint : Paint) {
     save()
     translate(gap * (i + 1), h / 2)
     rotate(90f * sc2)
-    drawLine(0f, -size / 2, 0f, size / 2)
+    drawLine(0f, -size / 2, 0f, size / 2, paint)
     for (j in 0..(lines - 1)) {
         drawRightAngleLine(j, sc1, size, paint)
     }
@@ -129,6 +129,50 @@ class RightAngleOverLineView(ctx : Context) : View(ctx) {
             if (animated) {
                 animated = false
             }
+        }
+    }
+
+    data class RAOLNode(var i : Int, val state : State = State()) {
+
+        private var next : RAOLNode? = null
+        private var prev : RAOLNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (i < nodes - 1) {
+                next = RAOLNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawRAOLNode(i, state.scale, paint)
+            next?.draw(canvas, paint)
+        }
+
+        fun update(cb : (Int, Float) -> Unit) {
+            state.update {
+                cb(i, it)
+            }
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : RAOLNode {
+            var curr : RAOLNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
         }
     }
 }
