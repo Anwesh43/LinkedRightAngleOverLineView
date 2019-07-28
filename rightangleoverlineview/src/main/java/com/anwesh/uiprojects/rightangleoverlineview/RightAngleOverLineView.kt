@@ -11,6 +11,7 @@ import android.app.Activity
 import android.graphics.Paint
 import android.graphics.Canvas
 import android.graphics.Color
+import android.util.Log
 
 val nodes : Int = 5
 val lines : Int = 2
@@ -42,7 +43,7 @@ fun Canvas.drawRightAngleLine(i : Int, sc : Float, size : Float, paint : Paint) 
         val y2j : Float = size / 2 * j * scj
         save()
         translate(0f, (size / 2) * sf)
-        drawLine(x1j, 0f, x2j, y2j, paint)
+        drawLine(x1j * sf, 0f, x2j * sf, y2j * sf, paint)
         restore()
     }
 }
@@ -52,13 +53,13 @@ fun Canvas.drawRAOLNode(i : Int, scale : Float, paint : Paint) {
     val sc2 : Float = scale.divideScale(1, 2)
     val w : Float = width.toFloat()
     val h : Float = height.toFloat()
-    val gap : Float = Math.min(w, h) / strokeFactor
+    val gap : Float = h / (nodes + 1)
     val size : Float = gap / sizeFactor
     paint.color = foreColor
     paint.strokeCap = Paint.Cap.ROUND
     paint.strokeWidth = Math.min(w, h) / strokeFactor
     save()
-    translate(gap * (i + 1), h / 2)
+    translate(w / 2, gap * (i + 1))
     rotate(90f * sc2)
     drawLine(0f, -size / 2, 0f, size / 2, paint)
     for (j in 0..(lines - 1)) {
@@ -89,6 +90,7 @@ class RightAngleOverLineView(ctx : Context) : View(ctx) {
 
         fun update(cb : (Float) -> Unit) {
             scale += scale.updateValue(dir, lines * parts, 1)
+            Log.d("scale:", "$scale")
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
                 dir = 0f
