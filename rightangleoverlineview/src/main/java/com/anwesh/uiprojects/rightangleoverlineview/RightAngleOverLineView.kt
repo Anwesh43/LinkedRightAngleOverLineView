@@ -56,7 +56,7 @@ fun Canvas.drawRAOLNode(i : Int, scale : Float, paint : Paint) {
     val size : Float = gap / sizeFactor
     paint.color = foreColor
     paint.strokeCap = Paint.Cap.ROUND
-    paint.strokeWidth = Math.min(w, h) / strokeFactor 
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
     save()
     translate(gap * (i + 1), h / 2)
     rotate(90f * sc2)
@@ -65,4 +65,22 @@ fun Canvas.drawRAOLNode(i : Int, scale : Float, paint : Paint) {
         drawRightAngleLine(j, sc1, size, paint)
     }
     restore()
+}
+
+class RightAngleOverLineView(ctx : Context) : View(ctx) {
+
+    private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    override fun onDraw(canvas : Canvas) {
+
+    }
+
+    override fun onTouchEvent(event : MotionEvent) : Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+
+            }
+        }
+        return true
+    }
 }
